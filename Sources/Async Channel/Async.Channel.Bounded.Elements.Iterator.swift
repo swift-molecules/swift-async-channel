@@ -3,9 +3,8 @@
     public import Ownership
     import Column
     public import Buffer_Ring_Primitive
-    public import Storage
     import Memory_Heap
-    import Memory_Allocator_Primitive
+    import Memory_Allocator
     import Buffer
     public import Deque
 
