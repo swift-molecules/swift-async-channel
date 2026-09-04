@@ -4,7 +4,7 @@
     public import Ownership
     import Column
     public import Buffer_Ring_Primitive
-    import Memory_Heap
+    import Memory
     import Memory_Allocator
     import Buffer
     internal import Deque

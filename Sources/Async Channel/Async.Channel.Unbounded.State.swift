@@ -5,7 +5,7 @@
     public import Column
     public import Buffer_Ring_Primitive
     public import Ownership
-    import Memory_Heap
+    import Memory
     import Memory_Allocator
     import Buffer
 
