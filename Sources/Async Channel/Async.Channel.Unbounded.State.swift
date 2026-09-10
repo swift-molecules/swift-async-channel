@@ -4,6 +4,7 @@
     public import Deque
     public import Column
     public import Buffer_Ring_Primitive
+    public import Storage_Memory
     public import Ownership
     import Memory
     import Memory_Allocator

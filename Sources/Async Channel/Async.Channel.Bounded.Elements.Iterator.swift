@@ -3,6 +3,7 @@
     public import Ownership
     import Column
     public import Buffer_Ring_Primitive
+    public import Storage_Memory
     import Memory
     import Memory_Allocator
     import Buffer

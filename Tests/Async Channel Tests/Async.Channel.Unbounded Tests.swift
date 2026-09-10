@@ -1,9 +1,10 @@
+import Async_Channel
 import Async
 import Ownership
 import Testing
 
 @Suite
-struct UnboundedChannelTests {
+struct `Unbounded async channels preserve delivery and closure` {
 
     @Test
     func `Send and receive single element`() async throws {
@@ -65,7 +66,7 @@ struct UnboundedChannelTests {
     }
 
     @Test
-    func `Send batch elements`() async throws {
+    func `Unbounded channels deliver every element in a batch`() async throws {
         let ends = Async.Channel<Int>.Unbounded().take().ends()
 
         try ends.sender.send(
@@ -81,7 +82,7 @@ struct UnboundedChannelTests {
     }
 
     @Test
-    func `closed reflects state`() {
+    func `The closed query reflects channel state`() {
         let ends = Async.Channel<Int>.Unbounded().take().ends()
 
         #expect(ends.sender.closed == false)
@@ -299,7 +300,7 @@ struct UnboundedChannelTests {
     }
 
     @Test
-    func `AsyncSequence iteration`() async throws {
+    func `Channel sequence iteration delivers every sent value`() async throws {
         let ends = Async.Channel<Int>.Unbounded().take().ends()
 
         try ends.sender.send(

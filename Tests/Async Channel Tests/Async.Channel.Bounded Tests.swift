@@ -1,8 +1,9 @@
+import Async_Channel
 import Async
 import Testing
 
 @Suite
-struct BoundedChannelTests {
+struct `Bounded async channels preserve delivery and backpressure` {
 
     @Test
     func `Send and receive single element`() async throws {
@@ -40,7 +41,7 @@ struct BoundedChannelTests {
     }
 
     @Test
-    func `send.immediate throws full when buffer full`() async throws {
+    func `Send.immediate throws full when buffer full`() async throws {
         let channel = Async.Channel<Int>.Bounded(capacity: 1)
         try channel.sender.send.immediate(1)
         do throws(Async.Channel<Int>.Error) {
@@ -75,7 +76,7 @@ struct BoundedChannelTests {
     }
 
     @Test
-    func `receive.immediate throws empty when buffer empty`() {
+    func `Receive.immediate throws empty when buffer empty`() {
         let channel = Async.Channel<Int>.Bounded(capacity: 1)
         do throws(Async.Channel<Int>.Error) {
             _ = try channel.receiver.receive.immediate()
@@ -93,7 +94,7 @@ struct BoundedChannelTests {
     }
 
     @Test
-    func `receive.immediate returns element when available`() async throws {
+    func `Receive.immediate returns element when available`() async throws {
         let channel = Async.Channel<Int>.Bounded(capacity: 1)
         try await channel.sender.send(42)
         let result = try channel.receiver.receive.immediate()
@@ -101,7 +102,7 @@ struct BoundedChannelTests {
     }
 
     @Test
-    func `isClosed reflects state`() {
+    func `The closed query reflects bounded channel state`() {
         let channel = Async.Channel<Int>.Bounded(capacity: 1)
         #expect(channel.sender.isClosed == false)
         #expect(channel.isClosed == false)
@@ -200,7 +201,7 @@ struct BoundedChannelTests {
     }
 
     @Test
-    func `Backpressure maintains order`() async throws {
+    func `Backpressure preserves bounded channel order`() async throws {
         let channel = Async.Channel<Int>.Bounded(capacity: 2)
         let sender = channel.sender
 
@@ -240,7 +241,7 @@ struct BoundedChannelTests {
     }
 
     @Test
-    func `Elements iteration`() async throws {
+    func `Bounded channel iteration delivers the sent elements`() async throws {
         let channel = Async.Channel<Int>.Bounded(capacity: 10)
         try await channel.sender.send(1)
         try await channel.sender.send(2)

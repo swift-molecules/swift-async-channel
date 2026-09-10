@@ -12,50 +12,53 @@ let package = Package(
         .visionOS(.v27),
     ],
     products: [
-        .library(
-            name: "Async Channel",
-            targets: ["Async Channel"]
-        )
+        .library(name: "Async Channel", targets: ["Async Channel"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-molecules/swift-async", branch: "main"),
-        .package(url: "https://github.com/swift-molecules/swift-async-waiter", branch: "main"),
-        .package(url: "https://github.com/swift-atoms/swift-buffer", branch: "main"),
-        .package(url: "https://github.com/swift-molecules/swift-buffer-ring", branch: "main"),
-        .package(url: "https://github.com/swift-molecules/swift-column", branch: "main"),
-        .package(url: "https://github.com/swift-molecules/swift-deque", branch: "main"),
-        .package(url: "https://github.com/swift-atoms/swift-index", branch: "main"),
-        .package(url: "https://github.com/swift-molecules/swift-memory-allocation", branch: "main"),
-        .package(url: "https://github.com/swift-atoms/swift-memory", branch: "main"),
-        .package(url: "https://github.com/swift-atoms/swift-ownership", branch: "main"),
-        .package(url: "https://github.com/swift-atoms/swift-pair", branch: "main"),
-        .package(url: "https://github.com/swift-molecules/swift-queue", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-async.git", branch: "main"),
+        .package(url: "https://github.com/swift-molecules/swift-async-waiter.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-buffer.git", branch: "main"),
+        .package(url: "https://github.com/swift-molecules/swift-buffer-ring.git", branch: "main"),
+        .package(url: "https://github.com/swift-molecules/swift-column.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-deque.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-index.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-memory.git", branch: "main"),
+        .package(url: "https://github.com/swift-molecules/swift-memory-allocation.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-ownership.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-pair.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-queue.git", branch: "main"),
+        .package(url: "https://github.com/swift-molecules/swift-storage-memory.git", branch: "main"),
     ],
     targets: [
         .target(
             name: "Async Channel",
             dependencies: [
-                .product(name: "Async", package: "swift-async"),
+                .product(name: "Async Continuation", package: "swift-async"),
+                .product(name: "Async Mutex", package: "swift-async"),
+                .product(name: "Async Primitive", package: "swift-async"),
                 .product(name: "Async Waiter", package: "swift-async-waiter"),
                 .product(name: "Buffer", package: "swift-buffer"),
-                .product(name: "Buffer Ring", package: "swift-buffer-ring"),
+                .product(name: "Buffer Ring Primitive", package: "swift-buffer-ring"),
                 .product(name: "Column", package: "swift-column"),
                 .product(name: "Deque", package: "swift-deque"),
                 .product(name: "Index", package: "swift-index"),
-                .product(name: "Memory Allocator", package: "swift-memory-allocation"),
                 .product(name: "Memory", package: "swift-memory"),
+                .product(name: "Memory Allocator", package: "swift-memory-allocation"),
                 .product(name: "Ownership", package: "swift-ownership"),
                 .product(name: "Pair", package: "swift-pair"),
                 .product(name: "Queue", package: "swift-queue"),
-            ]
+                .product(name: "Storage Memory", package: "swift-storage-memory"),
+            ],
+            path: "Sources/Async Channel"
         ),
         .testTarget(
             name: "Async Channel Tests",
             dependencies: [
-                "Async Channel",
                 .product(name: "Async", package: "swift-async"),
                 .product(name: "Ownership", package: "swift-ownership"),
-            ]
+                .target(name: "Async Channel"),
+            ],
+            path: "Tests/Async Channel Tests"
         ),
     ],
     swiftLanguageModes: [.v6]
