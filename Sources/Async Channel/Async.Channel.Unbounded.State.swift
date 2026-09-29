@@ -15,7 +15,7 @@
         @usableFromInline
         struct State: ~Copyable {
             @usableFromInline
-            var buffer: Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Element>>.Ring>
+            var buffer: Deque<Buffer<Storage::Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Element>>.Ring>
 
             @usableFromInline
             var waiter: Receive.Continuation?
