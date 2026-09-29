@@ -65,13 +65,13 @@ extension `Async channel benchmarks preserve delivery under repeated execution`.
         let started = Async.Barrier(parties: 2)
 
         let receiver = Task {
-            await started.arrive()
+            try await started.arrive()
             var count = 0
             while try await ends.receiver.receive() != nil { count += 1 }
             return count
         }
 
-        await started.arrive()
+        try await started.arrive()
         let elements = Array(0..<`Async channel benchmarks preserve delivery under repeated execution`.iterations)
         try ends.sender.send(contentsOf: elements.map { Ownership.Slot($0) })
         ends.close()
