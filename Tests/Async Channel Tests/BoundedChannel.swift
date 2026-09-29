@@ -1,5 +1,6 @@
 import Async_Channel
 import Async
+import Tagged
 import Testing
 
 extension `Async channel benchmarks preserve delivery under repeated execution` {
@@ -8,7 +9,7 @@ extension `Async channel benchmarks preserve delivery under repeated execution` 
 
 extension `Async channel benchmarks preserve delivery under repeated execution`.`Bounded channels preserve delivery under repeated execution` {
 
-    @Test(.timed(iterations: 10, warmup: 2))
+    @Test
     func `1000 round-trips capacity 1`() async throws {
         let channel = Async.Channel<Int>.Bounded(capacity: 1)
         let sender = channel.sender
@@ -26,7 +27,7 @@ extension `Async channel benchmarks preserve delivery under repeated execution`.
         _ = try await producer.value
     }
 
-    @Test(.timed(iterations: 10, warmup: 2))
+    @Test
     func `1000 round-trips capacity 1000`() async throws {
         let channel = Async.Channel<Int>.Bounded(capacity: 1_000)
         let sender = channel.sender
@@ -44,7 +45,7 @@ extension `Async channel benchmarks preserve delivery under repeated execution`.
         _ = try await producer.value
     }
 
-    @Test(.timed(iterations: 10, warmup: 2))
+    @Test
     func `1000 immediate sends capacity 1000`() async throws {
         let channel = Async.Channel<Int>.Bounded(capacity: 1_000)
         let sender = channel.sender

@@ -1,6 +1,7 @@
 import Async_Channel
 import Async
 import Ownership
+import Tagged
 import Testing
 
 extension `Async channel benchmarks preserve delivery under repeated execution` {
@@ -9,7 +10,7 @@ extension `Async channel benchmarks preserve delivery under repeated execution` 
 
 extension `Async channel benchmarks preserve delivery under repeated execution`.`Unbounded channels preserve delivery under repeated execution` {
 
-    @Test(.timed(iterations: 10, warmup: 2))
+    @Test
     func `Unbounded channels deliver 1000 values in one batch`() async throws {
         let ends = Async.Channel<Int>.Unbounded().take().ends()
         let elements = Array(0..<`Async channel benchmarks preserve delivery under repeated execution`.iterations)
@@ -22,7 +23,7 @@ extension `Async channel benchmarks preserve delivery under repeated execution`.
         #expect(count == `Async channel benchmarks preserve delivery under repeated execution`.iterations)
     }
 
-    @Test(.timed(iterations: 10, warmup: 2))
+    @Test
     func `Unbounded channels deliver 1000 individually sent values`() async throws {
         let ends = Async.Channel<Int>.Unbounded().take().ends()
 
@@ -39,7 +40,7 @@ extension `Async channel benchmarks preserve delivery under repeated execution`.
 
 extension `Async channel benchmarks preserve delivery under repeated execution`.`Unbounded channels preserve delivery under repeated execution` {
 
-    @Test(.timed(iterations: 10, warmup: 2))
+    @Test
     func `Unbounded channels preserve 1000 single value round trips`() async throws {
         let ends = Async.Channel<Int>.Unbounded().take().ends()
 
@@ -57,7 +58,7 @@ extension `Async channel benchmarks preserve delivery under repeated execution`.
         ends.close()
     }
 
-    @Test(.timed(iterations: 10, warmup: 2))
+    @Test
     func `Unbounded channels preserve 1000 batch round trips`() async throws {
         let ends = Async.Channel<Int>.Unbounded().take().ends()
         let started = Async.Barrier(parties: 2)
