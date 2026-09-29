@@ -2,6 +2,7 @@ import Async_Channel
 import Async
 import Ownership
 import Tagged
+import Async_Barrier
 import Testing
 
 @Suite
@@ -102,12 +103,12 @@ struct `Unbounded async channels preserve delivery and closure` {
         let sender = ends.sender
 
         let receiveTask = Task {
-            try? await started.arrive()
+            try? try await started.arrive()
             var iterator = elements.makeAsyncIterator()
             return try await iterator.next()
         }
 
-        try? await started.arrive()
+        try? try await started.arrive()
 
         try sender.send(42)
 
@@ -124,12 +125,12 @@ struct `Unbounded async channels preserve delivery and closure` {
         let sender = ends.sender
 
         let receiveTask = Task {
-            try? await started.arrive()
+            try? try await started.arrive()
             var iterator = elements.makeAsyncIterator()
             return try await iterator.next()
         }
 
-        try? await started.arrive()
+        try? try await started.arrive()
 
         sender.close()
 
@@ -172,12 +173,12 @@ struct `Unbounded async channels preserve delivery and closure` {
         let elements = ends.receiver.elements
 
         let receiveTask = Task {
-            try? await started.arrive()
+            try? try await started.arrive()
             var iterator = elements.makeAsyncIterator()
             return try await iterator.next()
         }
 
-        try? await started.arrive()
+        try? try await started.arrive()
 
         receiveTask.cancel()
 
@@ -284,12 +285,12 @@ struct `Unbounded async channels preserve delivery and closure` {
         let sender = ends.sender
 
         let receiveTask = Task {
-            try? await started.arrive()
+            try? try await started.arrive()
             var iterator = elements.makeAsyncIterator()
             return try await iterator.next()
         }
 
-        try? await started.arrive()
+        try? try await started.arrive()
 
         try sender.send(42)
 
@@ -328,12 +329,12 @@ struct `Unbounded async channels preserve delivery and closure` {
         let elements = ends.receiver.elements
 
         let receiveTask = Task {
-            try? await started.arrive()
+            try? try await started.arrive()
             var iterator = elements.makeAsyncIterator()
             return try await iterator.next()
         }
 
-        try? await started.arrive()
+        try? try await started.arrive()
 
         try sender.send(42)
 

@@ -1,6 +1,7 @@
 import Async_Channel
 import Async
 import Tagged
+import Async_Barrier
 import Testing
 
 @Suite
@@ -119,11 +120,11 @@ struct `Bounded async channels preserve delivery and backpressure` {
         let started = Async.Barrier(parties: 2)
 
         let receiveTask = Task {
-            try? await started.arrive()
+            try? try await started.arrive()
             return try await channel.receiver.receive()
         }
 
-        try? await started.arrive()
+        try? try await started.arrive()
         try await sender.send(42)
 
         let result = try await receiveTask.value
@@ -137,11 +138,11 @@ struct `Bounded async channels preserve delivery and backpressure` {
         let started = Async.Barrier(parties: 2)
 
         let receiveTask = Task {
-            try? await started.arrive()
+            try? try await started.arrive()
             return try await channel.receiver.receive()
         }
 
-        try? await started.arrive()
+        try? try await started.arrive()
         sender.close()
 
         let result = try await receiveTask.value
@@ -157,11 +158,11 @@ struct `Bounded async channels preserve delivery and backpressure` {
         try await sender.send(1)
 
         let sendTask = Task {
-            try? await started.arrive()
+            try? try await started.arrive()
             try await sender.send(2)
         }
 
-        try? await started.arrive()
+        try? try await started.arrive()
 
         let first = try await channel.receiver.receive()
         #expect(first == 1)
@@ -181,7 +182,7 @@ struct `Bounded async channels preserve delivery and backpressure` {
         try await sender.send(1)
 
         let sendTask = Task { () -> Async.Channel<Int>.Error? in
-            try? await started.arrive()
+            try? try await started.arrive()
             do {
                 try await sender.send(2)
                 return nil
@@ -192,7 +193,7 @@ struct `Bounded async channels preserve delivery and backpressure` {
             }
         }
 
-        try? await started.arrive()
+        try? try await started.arrive()
         sender.close()
 
         let error = await sendTask.value
@@ -230,11 +231,11 @@ struct `Bounded async channels preserve delivery and backpressure` {
         let started = Async.Barrier(parties: 2)
 
         let receiveTask = Task {
-            try? await started.arrive()
+            try? try await started.arrive()
             return try await channel.receiver.receive()
         }
 
-        try? await started.arrive()
+        try? try await started.arrive()
         try await sender.send(42)
 
         let result = try await receiveTask.value
@@ -286,7 +287,7 @@ struct `Bounded async channels preserve delivery and backpressure` {
         try await sender.send(1)
 
         let sendTask = Task { () -> Async.Channel<Int>.Error? in
-            try? await started.arrive()
+            try? try await started.arrive()
             do {
                 try await sender.send(2)
                 return nil
@@ -297,7 +298,7 @@ struct `Bounded async channels preserve delivery and backpressure` {
             }
         }
 
-        try? await started.arrive()
+        try? try await started.arrive()
         sendTask.cancel()
 
         let error = await sendTask.value
