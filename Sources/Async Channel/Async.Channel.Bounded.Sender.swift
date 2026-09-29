@@ -4,12 +4,12 @@
     public import Ownership
     internal import Queue
     public import Deque
-    public import Column
+    public import Memory
+    public import Memory_Allocator
+    public import Storage
+    public import Buffer
     public import Buffer_Ring_Primitive
-    public import Storage_Memory
-    import Memory
-    import Memory_Allocator
-    import Buffer
+
 
     extension Async.Channel.Bounded where Element: ~Copyable {
 
@@ -107,7 +107,7 @@
             } onCancel: {
                 if flag.cancel() {
                     var cancelled = Deque<
-                        Column.Ring<Async.Channel<Element>.Bounded.State.Send.Continuation>
+                        Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Async.Channel<Element>.Bounded.State.Send.Continuation>>.Ring
                     >()
                     handle.storage.withLock { state in
                         cancelled = state.reap()

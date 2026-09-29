@@ -2,20 +2,20 @@
 
     import Queue
     public import Deque
-    public import Column
+    public import Memory
+    public import Memory_Allocator
+    public import Storage
+    public import Buffer
     public import Buffer_Ring_Primitive
-    public import Storage_Memory
+
     public import Ownership
-    import Memory
-    import Memory_Allocator
-    import Buffer
 
     extension Async.Channel.Unbounded where Element: ~Copyable {
 
         @usableFromInline
         struct State: ~Copyable {
             @usableFromInline
-            var buffer: Deque<Column.Ring<Element>>
+            var buffer: Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Element>>.Ring>
 
             @usableFromInline
             var waiter: Receive.Continuation?

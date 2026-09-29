@@ -1,11 +1,18 @@
 #if !hasFeature(Embedded)
 
-    import Column
-    public import Buffer_Ring_Primitive
-    public import Storage_Memory
-    import Memory
-    import Memory_Allocator
     import Buffer
+    import Buffer_Linear_Primitive
+    import Buffer_Linear_Bounded_Primitive
+    import Buffer_Ring_Primitive
+    import Memory_Allocator_Pool
+    import Memory_Pool
+    import Memory_Allocator
+    import Memory
+    import Ownership_Shared_Primitive
+    import Storage
+    import Store
+    public import Buffer_Ring_Primitive
+    public import Storage
     public import Deque
 
     extension Async.Channel.Bounded.Receiver where Element: ~Copyable {

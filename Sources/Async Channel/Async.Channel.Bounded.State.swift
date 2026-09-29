@@ -4,12 +4,12 @@
     public import Ownership
     internal import Queue
     public import Deque
-    public import Column
+    public import Memory
+    public import Memory_Allocator
+    public import Storage
+    public import Buffer
     public import Buffer_Ring_Primitive
-    public import Storage_Memory
-    import Memory
-    import Memory_Allocator
-    import Buffer
+
 
     extension Async.Channel.Bounded where Element: ~Copyable {
 
@@ -18,9 +18,9 @@
             @usableFromInline
             var status: Status
             @usableFromInline
-            var buffer: Deque<Column.Ring<Element>>
+            var buffer: Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Element>>.Ring>
             @usableFromInline
-            var senders: Deque<Column.Ring<Sender>>
+            var senders: Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Sender>>.Ring>
             @usableFromInline
             var receiver: Receiver?
             @usableFromInline
@@ -93,11 +93,11 @@
 
         @usableFromInline
         mutating func next(
-            collectingCancelledInto cancelled: inout Deque<Column.Ring<Send.Continuation>>?
+            collectingCancelledInto cancelled: inout Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Send.Continuation>>.Ring>?
         ) -> Sender? {
             while let sender = senders.take(from: .front) {
                 if sender.flag.isFlagged {
-                    if cancelled == nil { cancelled = Deque<Column.Ring<Send.Continuation>>() }
+                    if cancelled == nil { cancelled = Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Send.Continuation>>.Ring>() }
                     cancelled?.push(sender.continuation, to: .back)
                     continue
                 }
@@ -209,9 +209,9 @@
         }
 
         @usableFromInline
-        mutating func reap() -> Deque<Column.Ring<Send.Continuation>> {
-            var cancelled = Deque<Column.Ring<Send.Continuation>>()
-            var survivors = Deque<Column.Ring<Sender>>()
+        mutating func reap() -> Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Send.Continuation>>.Ring> {
+            var cancelled = Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Send.Continuation>>.Ring>()
+            var survivors = Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Sender>>.Ring>()
             while let sender = senders.take(from: .front) {
                 if sender.flag.isFlagged {
                     cancelled.push(sender.continuation, to: .back)
@@ -251,7 +251,7 @@
                 Element,
                 resumeSender: Async.Channel<Element>.Bounded.State.Send.Continuation?,
                 cancelled: Deque<
-                    Column.Ring<Async.Channel<Element>.Bounded.State.Send.Continuation>
+                    Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Async.Channel<Element>.Bounded.State.Send.Continuation>>.Ring
                 >?,
                 receiver: Async.Channel<Element>.Bounded.State.Receive.Continuation?
             )
@@ -280,7 +280,7 @@
             case .open:
                 precondition(receiver == nil, "Single-consumer invariant violated")
 
-                var cancelled: Deque<Column.Ring<Send.Continuation>>? = nil
+                var cancelled: Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Send.Continuation>>.Ring>? = nil
 
                 if let element = buffer.take(from: .front) {
 
@@ -341,7 +341,7 @@
             case .open:
                 precondition(receiver == nil, "Single-consumer invariant violated")
 
-                var cancelled: Deque<Column.Ring<Send.Continuation>>? = nil
+                var cancelled: Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Send.Continuation>>.Ring>? = nil
 
                 if let element = buffer.take(from: .front) {
                     if let sender = next(collectingCancelledInto: &cancelled) {
@@ -417,12 +417,12 @@
             @usableFromInline
             var receiverToResume: Receive.Continuation?
             @usableFromInline
-            var sendersToCancel: Deque<Column.Ring<Send.Continuation>>
+            var sendersToCancel: Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Send.Continuation>>.Ring>
 
             @usableFromInline
             init(
                 receiverToResume: consuming Receive.Continuation?,
-                sendersToCancel: consuming Deque<Column.Ring<Send.Continuation>>
+                sendersToCancel: consuming Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Send.Continuation>>.Ring>
             ) {
                 self.receiverToResume = receiverToResume
                 self.sendersToCancel = sendersToCancel
@@ -434,7 +434,7 @@
             switch status {
             case .open:
 
-                var sendersToCancel = Deque<Column.Ring<Send.Continuation>>()
+                var sendersToCancel = Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Send.Continuation>>.Ring>()
                 while let sender = senders.take(from: .front) {
                     sendersToCancel.push(sender.continuation, to: .back)
                 }
@@ -456,7 +456,7 @@
             case .closed, .finished:
                 return Close(
                     receiverToResume: nil,
-                    sendersToCancel: Deque<Column.Ring<Send.Continuation>>()
+                    sendersToCancel: Deque<Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Send.Continuation>>.Ring>()
                 )
             }
         }
