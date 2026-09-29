@@ -1,3 +1,4 @@
+public import Memory_Allocator_Protocol
 #if !hasFeature(Embedded)
 
     public import Async_Waiter
