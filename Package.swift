@@ -35,6 +35,7 @@ let package = Package(
         .target(
             name: "Async Channel",
             dependencies: [
+                .product(name: "Memory Allocator Protocol", package: "swift-memory-allocation"),
                 .product(name: "Async Continuation", package: "swift-async"),
                 .product(name: "Async Mutex", package: "swift-async"),
                 .product(name: "Async Primitive", package: "swift-async"),
