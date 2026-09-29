@@ -2,6 +2,7 @@ import Async_Channel
 import Async
 import Ownership
 import Tagged
+import Async_Barrier
 import Testing
 
 extension `Async channel benchmarks preserve delivery under repeated execution` {

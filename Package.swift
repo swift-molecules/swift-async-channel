@@ -15,6 +15,7 @@ let package = Package(
         .library(name: "Async Channel", targets: ["Async Channel"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/swift-molecules/swift-async-barrier.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-tagged.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-async.git", branch: "main"),
         .package(url: "https://github.com/swift-molecules/swift-async-waiter.git", branch: "main"),
@@ -67,6 +68,7 @@ let package = Package(
                 .product(name: "Ownership", package: "swift-ownership"),
                 .target(name: "Async Channel"),
                 .product(name: "Tagged", package: "swift-tagged"),
+                .product(name: "Async Barrier", package: "swift-async-barrier"),
             ],
             path: "Tests/Async Channel Tests"
         ),
