@@ -1,6 +1,7 @@
 import Async_Channel
 import Async
 import Ownership
+import Tagged
 import Testing
 
 @Suite

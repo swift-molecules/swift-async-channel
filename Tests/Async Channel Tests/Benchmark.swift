@@ -1,5 +1,6 @@
 import Async_Channel
 import Async
+import Tagged
 import Testing
 
 @Suite(.serialized)

@@ -1,5 +1,6 @@
 import Async
 import Async_Channel
+import Tagged
 import Testing
 
 @Suite
