@@ -69,6 +69,7 @@ let package = Package(
                 .target(name: "Async Channel"),
                 .product(name: "Tagged", package: "swift-tagged"),
                 .product(name: "Async Barrier", package: "swift-async-barrier"),
+                .product(name: "Deque", package: "swift-deque"),
             ],
             path: "Tests/Async Channel Tests"
         ),
