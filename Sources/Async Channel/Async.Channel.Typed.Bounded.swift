@@ -12,6 +12,7 @@
     public import Index
 
     extension Async.Channel.Typed where Element: ~Copyable, Failure: Swift.Error & Sendable {
+        @frozen
         public struct Bounded: ~Copyable, Sendable {
             @usableFromInline let terminals: TerminalStorage
 
