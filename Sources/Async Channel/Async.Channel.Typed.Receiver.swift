@@ -9,7 +9,7 @@
 
 #if !hasFeature(Embedded)
 
-    extension Async.Channel.Typed where Element: ~Copyable, Failure: Swift.Error & Sendable {
+    extension Async.Channel.Typed where Element: ~Copyable, Failure: Swift::Error & Sendable {
         public struct Receiver: ~Copyable, Sendable {
             @usableFromInline let raw: Async.Channel<Element>.Bounded.Receiver
             @usableFromInline let closer: Async.Channel<Element>.Bounded.Sender
@@ -28,7 +28,7 @@
         }
     }
 
-    extension Async.Channel.Typed.Receiver where Element: ~Copyable, Failure: Swift.Error & Sendable {
+    extension Async.Channel.Typed.Receiver where Element: ~Copyable, Failure: Swift::Error & Sendable {
         public func receive() async throws(Async.Channel<Element>.Typed<Failure>.Error) -> sending Element? {
             do throws(Async._ChannelError) {
                 if let element = try await raw.receive() {

@@ -19,7 +19,7 @@
     public import Buffer
     public import Buffer_Ring_Primitive
 
-    extension Async.Channel.Typed.Rendezvous where Element: ~Copyable, Failure: Swift.Error & Sendable {
+    extension Async.Channel.Typed.Rendezvous where Element: ~Copyable, Failure: Swift::Error & Sendable {
         public struct Receiver: ~Copyable, Sendable {
             @usableFromInline let storage: Storage
 
@@ -30,7 +30,7 @@
         }
     }
 
-    extension Async.Channel.Typed.Rendezvous.Receiver where Element: ~Copyable, Failure: Swift.Error & Sendable {
+    extension Async.Channel.Typed.Rendezvous.Receiver where Element: ~Copyable, Failure: Swift::Error & Sendable {
         @usableFromInline
         final class Waiter: Sendable {
             @usableFromInline typealias Continuation = Async.Continuation<Signal>.Unsafe
@@ -139,7 +139,7 @@
             storage.withLock { state in
                 guard state.receiverTerminal == nil else { return }
                 state.receiverTerminal = terminal
-                Swift.swap(&senders, &state.senders)
+                Swift::swap(&senders, &state.senders)
             }
             while let sender = senders.take(from: .front) {
                 sender.continuation.take()?.resume(returning: .rejected(Async.Channel<Element>.Typed<Failure>.Error(terminal: terminal)))

@@ -18,7 +18,7 @@ import Testing
 
 @Suite
 struct `Typed channels preserve terminal identity and handoff` {
-    enum Failure: Swift.Error, Sendable, Equatable {
+    enum Failure: Swift::Error, Sendable, Equatable {
         case stopped(Int)
     }
 

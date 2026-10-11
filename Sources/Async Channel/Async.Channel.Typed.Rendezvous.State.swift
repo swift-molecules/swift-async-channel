@@ -19,7 +19,7 @@
     public import Buffer
     public import Buffer_Ring_Primitive
 
-    extension Async.Channel.Typed.Rendezvous where Element: ~Copyable, Failure: Swift.Error & Sendable {
+    extension Async.Channel.Typed.Rendezvous where Element: ~Copyable, Failure: Swift::Error & Sendable {
         @usableFromInline
         struct State: ~Copyable {
             @usableFromInline var senderTerminal: Async.Channel<Element>.Typed<Failure>.Terminal?

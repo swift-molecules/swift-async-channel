@@ -11,7 +11,7 @@
 
     import Synchronization
 
-    extension Async.Channel.Typed.Rendezvous where Element: ~Copyable, Failure: Swift.Error & Sendable {
+    extension Async.Channel.Typed.Rendezvous where Element: ~Copyable, Failure: Swift::Error & Sendable {
         @usableFromInline
         final class Storage: Sendable {
             @usableFromInline let mutex: Async.Mutex<State>

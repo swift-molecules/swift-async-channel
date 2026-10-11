@@ -7,7 +7,7 @@
 
     extension Async {
 
-        public enum _ChannelError: Swift.Error, Sendable, Equatable {
+        public enum _ChannelError: Swift::Error, Sendable, Equatable {
 
             case closed
 

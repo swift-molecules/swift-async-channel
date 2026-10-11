@@ -9,7 +9,7 @@
 
 #if !hasFeature(Embedded)
 
-    extension Async.Channel.Typed where Element: ~Copyable, Failure: Swift.Error & Sendable {
+    extension Async.Channel.Typed where Element: ~Copyable, Failure: Swift::Error & Sendable {
         public struct Sender: Sendable {
             @usableFromInline let raw: Async.Channel<Element>.Bounded.Sender
             @usableFromInline let terminals: TerminalStorage
@@ -22,7 +22,7 @@
         }
     }
 
-    extension Async.Channel.Typed.Sender where Element: ~Copyable, Failure: Swift.Error & Sendable {
+    extension Async.Channel.Typed.Sender where Element: ~Copyable, Failure: Swift::Error & Sendable {
         public func send(_ element: consuming sending Element) async throws(Async.Channel<Element>.Typed<Failure>.Error) {
             if let terminal = terminals.terminal(from: .receiver) ?? terminals.terminal(from: .sender) {
                 throw Async.Channel<Element>.Typed<Failure>.Error(terminal: terminal)

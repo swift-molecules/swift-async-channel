@@ -9,7 +9,7 @@
 
 #if !hasFeature(Embedded)
 
-    extension Async.Channel.Typed.Rendezvous.Send where Element: ~Copyable, Failure: Swift.Error & Sendable {
+    extension Async.Channel.Typed.Rendezvous.Send where Element: ~Copyable, Failure: Swift::Error & Sendable {
         public enum Outcome: ~Copyable {
             case sent
 

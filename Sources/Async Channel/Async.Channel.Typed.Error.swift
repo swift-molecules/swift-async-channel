@@ -9,7 +9,7 @@
 
 #if !hasFeature(Embedded)
 
-    public enum _TypedChannelError<Failure: Swift.Error & Sendable>: Swift.Error, Sendable {
+    public enum _TypedChannelError<Failure: Swift::Error & Sendable>: Swift::Error, Sendable {
         case closed
 
         case cancelled

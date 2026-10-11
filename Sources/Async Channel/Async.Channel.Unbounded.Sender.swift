@@ -65,7 +65,7 @@ public import Memory_Allocator_Protocol
         }
 
         @inlinable
-        public func send<S: Swift.Sequence>(
+        public func send<S: Swift::Sequence>(
             contentsOf slots: sending S
         ) throws(Async.Channel<Element>.Error) where S.Element == Ownership.Slot<Element> {
             let batch = Array(slots)
