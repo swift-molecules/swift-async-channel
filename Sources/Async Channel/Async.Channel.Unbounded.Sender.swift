@@ -1,4 +1,5 @@
 public import Memory_Allocator_Protocol
+
 #if !hasFeature(Embedded)
 
     public import Ownership
@@ -42,8 +43,7 @@ public import Memory_Allocator_Protocol
 
         @_optimize(none)
         @inlinable
-        public func send(_ element: consuming sending Element) throws(Async.Channel<Element>.Error)
-        {
+        public func send(_ element: consuming sending Element) throws(Async.Channel<Element>.Error) {
             let slot = Ownership.Slot(consume element)
             let action = storage.withLock { state in
                 state.send(slot)

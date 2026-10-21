@@ -1,7 +1,7 @@
-import Async_Channel
 import Async
-import Tagged
 import Async_Barrier
+import Async_Channel
+import Tagged
 import Testing
 
 @Suite

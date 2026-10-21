@@ -1,4 +1,5 @@
 public import Memory_Allocator_Protocol
+
 #if !hasFeature(Embedded)
 
     public import Async_Waiter
@@ -10,7 +11,6 @@ public import Memory_Allocator_Protocol
     public import Storage
     public import Buffer
     public import Buffer_Ring_Primitive
-
 
     extension Async.Channel.Bounded where Element: ~Copyable {
 

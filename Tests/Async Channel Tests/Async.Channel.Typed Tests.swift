@@ -7,14 +7,14 @@
 //
 // ===----------------------------------------------------------------------===//
 
-
-@testable import Async_Channel
+import Async
+import Async_Barrier
 import Deque
 import Pair
 import Tagged
-import Async
-import Async_Barrier
 import Testing
+
+@testable import Async_Channel
 
 @Suite
 struct `Typed channels preserve terminal identity and handoff` {
@@ -208,7 +208,10 @@ struct `Typed channels preserve terminal identity and handoff` {
         let sender = channel.sender
         let storage = sender.storage
         let first = Task {
-            switch await sender.send(1) { case .sent: true; case .rejected: false }
+            switch await sender.send(1) {
+            case .sent: true
+            case .rejected: false
+            }
         }
         var spins = 0
         while storage.withLock({ $0.senders.isEmpty }) && spins < 1_000_000 {
@@ -218,7 +221,10 @@ struct `Typed channels preserve terminal identity and handoff` {
         let firstEnqueued = !storage.withLock { $0.senders.isEmpty }
         #expect(firstEnqueued)
         let second = Task {
-            switch await sender.send(2) { case .sent: true; case .rejected: false }
+            switch await sender.send(2) {
+            case .sent: true
+            case .rejected: false
+            }
         }
         spins = 0
         while storage.withLock({ $0.senders.count != 2 }) && spins < 1_000_000 {

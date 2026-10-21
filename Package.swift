@@ -12,7 +12,7 @@ let package = Package(
         .visionOS(.v27),
     ],
     products: [
-        .library(name: "Async Channel", targets: ["Async Channel"]),
+        .library(name: "Async Channel", targets: ["Async Channel"])
     ],
     dependencies: [
         .package(url: "https://github.com/swift-molecules/swift-async-barrier.git", branch: "main"),
