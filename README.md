@@ -14,7 +14,7 @@ Untyped channels (`Async.Channel<Element>.Bounded`, `Async.Channel<Element>.Unbo
 - Bounded: releasing every copy of the channel's `sender` closes the channel. The receiver still drains what was buffered.
 - Unbounded: dropping senders never closes the channel. Only `close()` does.
 - Unbounded: `send(contentsOf:)` enqueues the whole batch in order under one lock. It enqueues all of it or, if the channel is already closed, none of it.
-- Unbounded: `poll()` never waits and returns `nil` both when the channel is empty and when it is closed.
+- Unbounded: `poll()` never waits. It returns buffered elements also after close, and returns `nil` whenever nothing is buffered, so `nil` does not tell an empty channel from a closed one.
 - Unbounded: two `Async.Channel<Element>.Unbounded.Sender` values are equal exactly when they feed the same channel, also after close.
 
 Typed channels (`Async.Channel<Element>.Typed<Failure>`):
