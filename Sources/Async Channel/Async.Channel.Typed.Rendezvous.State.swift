@@ -9,9 +9,9 @@
 
 #if !hasFeature(Embedded)
 
-    public import Memory_Allocator_Protocol
+    import Memory_Allocator_Protocol
     public import Async_Waiter
-    public import Ownership
+    import Ownership
     public import Deque
     public import Memory
     public import Memory_Allocator

@@ -24,8 +24,8 @@
             }
 
             public static func pair() -> Pair<Self, Self> {
-                var leftToRight = Async.Channel<Element>.Typed<Failure>.Rendezvous()
-                var rightToLeft = Async.Channel<Element>.Typed<Failure>.Rendezvous()
+                let leftToRight = Async.Channel<Element>.Typed<Failure>.Rendezvous()
+                let rightToLeft = Async.Channel<Element>.Typed<Failure>.Rendezvous()
                 return Pair(
                     Self(outbound: leftToRight.sender, inbound: consume rightToLeft.receiver),
                     Self(outbound: rightToLeft.sender, inbound: consume leftToRight.receiver)

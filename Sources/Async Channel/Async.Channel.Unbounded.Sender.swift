@@ -6,7 +6,6 @@ public import Memory_Allocator_Protocol
     import Buffer
     import Buffer_Linear_Primitive
     import Buffer_Linear_Bounded_Primitive
-    import Buffer_Ring_Primitive
     import Memory_Allocator_Pool
     import Memory_Pool
     import Memory_Allocator
@@ -14,7 +13,7 @@ public import Memory_Allocator_Protocol
     import Ownership_Shared_Primitive
     import Storage
     import Store
-    public import Buffer_Ring_Primitive
+    import Buffer_Ring_Primitive
     public import Deque
     public import Pair
 

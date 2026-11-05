@@ -9,15 +9,15 @@
 
 #if !hasFeature(Embedded)
 
-    public import Memory_Allocator_Protocol
+    import Memory_Allocator_Protocol
     public import Async_Waiter
     public import Ownership
-    public import Deque
-    public import Memory
-    public import Memory_Allocator
-    public import Storage
-    public import Buffer
-    public import Buffer_Ring_Primitive
+    import Deque
+    import Memory
+    import Memory_Allocator
+    import Storage
+    import Buffer
+    import Buffer_Ring_Primitive
 
     extension Async.Channel.Typed.Rendezvous where Element: ~Copyable, Failure: Swift::Error & Sendable {
         public struct Sender: Sendable {

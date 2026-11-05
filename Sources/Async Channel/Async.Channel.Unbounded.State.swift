@@ -1,4 +1,4 @@
-public import Memory_Allocator_Protocol
+import Memory_Allocator_Protocol
 #if !hasFeature(Embedded)
 
     import Queue

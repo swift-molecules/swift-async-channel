@@ -21,7 +21,7 @@
             public var receiver: Receiver
 
             public init(capacity: Index<Element>.Count) {
-                var raw = Async.Channel<Element>.Bounded(capacity: capacity)
+                let raw = Async.Channel<Element>.Bounded(capacity: capacity)
                 let terminals = TerminalStorage()
                 self.terminals = terminals
                 self.sender = Sender(raw: raw.sender, terminals: terminals)
