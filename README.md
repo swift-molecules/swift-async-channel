@@ -21,7 +21,7 @@ Typed channels (`Async.Channel<Element>.Typed<Failure>`):
 
 - Each direction installs at most one terminal. The first `finish()` or `fail(_:)` on a side wins, and later calls on that side do nothing.
 - A send reports the receiver's terminal ahead of the sender's own. A receive reports the sender's terminal ahead of the receiver's own.
-- A sender's `finish()` makes receives return `nil`, and its `fail(_:)` makes them throw `.failed` with that exact failure. After the receiver's own `finish()`, receive returns `nil` and sends throw `.finished`.
+- A sender's `finish()` makes receives return `nil`, and its `fail(_:)` makes them throw `.failed` with that exact failure. After the receiver's own `finish()`, receive returns `nil`, on Bounded once the buffered elements are drained, and sends throw `.finished`.
 - With no terminal installed, cancellation is reported as `.cancelled`.
 - Bounded: buffered elements drain before the sender's terminal is reported. Once a terminal is installed, a send or receive that fails with `.closed` or `.cancelled` reports that terminal instead. The receiver keeps the channel open, so it ends only through `finish()` or `fail(_:)`, never by dropping senders. A rejected send drops its element.
 - Rendezvous: a cancelled operation reports `.cancelled` even when a terminal is installed. Nothing is buffered. `.sent` means a receiver now owns the element. Every rejection, including cancellation before pairing, hands the element back in `.rejected`. Once pairing has happened, delivery wins over a later cancellation.
