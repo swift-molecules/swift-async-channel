@@ -28,7 +28,7 @@ struct `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `sender sends and finishes receiver`() async throws {
-        var channel = Async.Channel<Int>.Typed<Failure>.Bounded(capacity: 1)
+        let channel = Async.Channel<Int>.Typed<Failure>.Bounded(capacity: 1)
 
         try await channel.sender.send(42)
         channel.sender.finish()
@@ -39,7 +39,7 @@ struct `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `sender failure preserves buffered drain and identity`() async throws {
-        var channel = Async.Channel<Int>.Typed<Failure>.Bounded(capacity: 2)
+        let channel = Async.Channel<Int>.Typed<Failure>.Bounded(capacity: 2)
 
         try await channel.sender.send(1)
         channel.sender.fail(.stopped(2))
@@ -60,7 +60,7 @@ struct `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `receiver failure propagates to sender`() async {
-        var channel = Async.Channel<Int>.Typed<Failure>.Bounded(capacity: 1)
+        let channel = Async.Channel<Int>.Typed<Failure>.Bounded(capacity: 1)
 
         channel.receiver.fail(.stopped(3))
 
@@ -79,7 +79,7 @@ struct `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `first terminal operation wins`() async throws {
-        var channel = Async.Channel<Int>.Typed<Failure>.Bounded(capacity: 1)
+        let channel = Async.Channel<Int>.Typed<Failure>.Bounded(capacity: 1)
 
         channel.sender.fail(.stopped(4))
         channel.sender.finish()
@@ -99,7 +99,7 @@ struct `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `typed sender retains bounded backpressure`() async throws {
-        var channel = Async.Channel<Int>.Typed<Failure>.Bounded(capacity: 1)
+        let channel = Async.Channel<Int>.Typed<Failure>.Bounded(capacity: 1)
         let sender = channel.sender
         let gate = Async.Barrier(parties: 2)
 
@@ -117,7 +117,7 @@ struct `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `receiver failure resumes a backpressured sender with the same failure`() async throws {
-        var channel = Async.Channel<Int>.Typed<Failure>.Bounded(capacity: 1)
+        let channel = Async.Channel<Int>.Typed<Failure>.Bounded(capacity: 1)
         let sender = channel.sender
         let gate = Async.Barrier(parties: 2)
 
@@ -146,7 +146,7 @@ struct `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `cancelling a backpressured sender preserves cancellation`() async throws {
-        var channel = Async.Channel<Int>.Typed<Failure>.Bounded(capacity: 1)
+        let channel = Async.Channel<Int>.Typed<Failure>.Bounded(capacity: 1)
         let sender = channel.sender
         let gate = Async.Barrier(parties: 2)
 
@@ -175,7 +175,7 @@ struct `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `rendezvous pairs sender first without storing an element`() async throws {
-        var channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
+        let channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
         let sender = channel.sender
         let sending = Task {
             switch await sender.send(1) {
@@ -190,7 +190,7 @@ struct `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `rendezvous pairs receiver first`() async throws {
-        var channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
+        let channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
         let sender = channel.sender
         let receiver = consume channel.receiver
         let receiving = Task { try await receiver.receive() }
@@ -204,7 +204,7 @@ struct `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `rendezvous preserves FIFO sender pairing`() async throws {
-        var channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
+        let channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
         let sender = channel.sender
         let storage = sender.storage
         let first = Task {
@@ -242,7 +242,7 @@ struct `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `rendezvous cancellation returns the unpaired sender element`() async {
-        var channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
+        let channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
         let sender = channel.sender
         let receiver = consume channel.receiver
         let task = Task { () -> Int? in
@@ -258,7 +258,7 @@ struct `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `rendezvous receiver cancellation removes only that waiter`() async {
-        var channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
+        let channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
         let receiver = consume channel.receiver
         let task = Task { try await receiver.receive() }
         task.cancel()
@@ -275,7 +275,7 @@ struct `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `rendezvous terminal wakes waiters and preserves exact failure`() async throws {
-        var channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
+        let channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
         let sender = channel.sender
         let waiting = Task { () -> (Int, Failure?) in
             switch await sender.send(4) {
@@ -318,7 +318,7 @@ struct `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `rendezvous transfers a move only element exactly once`() async throws {
-        var channel = Async.Channel<Token>.Typed<Failure>.Rendezvous()
+        let channel = Async.Channel<Token>.Typed<Failure>.Rendezvous()
         let sender = channel.sender
         let sending = Task {
             switch await sender.send(Token(value: 9)) {
@@ -476,7 +476,7 @@ extension `Typed channels preserve terminal identity and handoff` {
     @Test
     func `rendezvous handoff transfers a tracked element exactly once`() async throws {
         let tracker = Tracker()
-        var channel = Async.Channel<Tracked>.Typed<Failure>.Rendezvous()
+        let channel = Async.Channel<Tracked>.Typed<Failure>.Rendezvous()
         let sender = channel.sender
         let sending = Task {
             switch await sender.send(Tracked(value: 40, tracker: tracker)) {
@@ -596,7 +596,7 @@ extension `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `rendezvous cancellation of an already enqueued receiver removes the waiter`() async {
-        var channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
+        let channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
         let storage = channel.sender.storage
         let receiver = consume channel.receiver
         let task = Task { () -> Async.Channel<Int>.Typed<Failure>.Error? in
@@ -625,7 +625,7 @@ extension `Typed channels preserve terminal identity and handoff` {
 
     @Test
     func `rendezvous delivery wins over cancellation once pairing has happened`() async {
-        var channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
+        let channel = Async.Channel<Int>.Typed<Failure>.Rendezvous()
         let sender = channel.sender
         let storage = sender.storage
         let receiver = consume channel.receiver
