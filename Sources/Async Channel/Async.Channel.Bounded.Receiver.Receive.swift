@@ -25,7 +25,7 @@
         }
     }
 
-extension Async.Channel.Bounded.Receiver.Receive {
+    extension Async.Channel.Bounded.Receiver.Receive {
         @_optimize(none)
         @inlinable
         public func immediate() throws(Async.Channel<Element>.Error) -> Element? {
@@ -52,6 +52,6 @@ extension Async.Channel.Bounded.Receiver.Receive {
                 throw .empty
             }
         }
-}
+    }
 
 #endif

@@ -25,7 +25,7 @@
         }
     }
 
-extension Async.Channel.Bounded.Sender.Send {
+    extension Async.Channel.Bounded.Sender.Send {
         @_optimize(none)
         @inlinable
         public func immediate(
@@ -53,6 +53,6 @@ extension Async.Channel.Bounded.Sender.Send {
                 throw .full
             }
         }
-}
+    }
 
 #endif
