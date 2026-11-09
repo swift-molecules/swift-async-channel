@@ -12,9 +12,9 @@
             }
 
             public consuming func ends() -> Ends {
-                let storage = channel.storage
+                let sender = channel.sender
                 let receiver = consume channel.receiver
-                return Ends(storage: storage, receiver: receiver)
+                return Ends(sender: sender, receiver: receiver)
             }
         }
     }

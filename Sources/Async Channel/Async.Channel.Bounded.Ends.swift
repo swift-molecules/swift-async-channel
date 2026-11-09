@@ -3,15 +3,14 @@
     extension Async.Channel.Bounded where Element: ~Copyable {
 
         public struct Ends: ~Copyable, Sendable {
-            @usableFromInline
-            let storage: Storage
+            public let sender: Sender
 
             @usableFromInline
             var _receiver: Receiver
 
             @usableFromInline
-            init(storage: Storage, receiver: consuming Receiver) {
-                self.storage = storage
+            init(sender: Sender, receiver: consuming Receiver) {
+                self.sender = sender
                 self._receiver = receiver
             }
         }
@@ -26,10 +25,6 @@
             _modify {
                 yield &_receiver
             }
-        }
-
-        public var sender: Async.Channel<Element>.Bounded.Sender {
-            Async.Channel<Element>.Bounded.Sender(storage: storage)
         }
 
         public func close() {

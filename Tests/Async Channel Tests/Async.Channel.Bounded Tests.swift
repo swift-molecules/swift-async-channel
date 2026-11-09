@@ -262,23 +262,35 @@ extension `Async.Channel.Bounded Tests` {
         }
 
         @Test
-        func `Auto-close when sender drops`() async throws {
-            var ends: Async.Channel<Int>.Bounded.Ends
+        func `Auto-close when the ends drop`() async throws {
+            let elements: Async.Channel<Int>.Bounded.Elements
             do {
                 let channel = Async.Channel<Int>.Bounded(capacity: 1)
-                try await channel.sender.send(42)
-                ends = channel.take().ends()
-
+                let ends = channel.take().ends()
+                try await ends.sender.send(42)
+                elements = ends.receiver.elements
             }
 
-            let isClosed = ends.isClosed
-            #expect(isClosed)
+            var received: [Int] = []
+            for try await value in elements {
+                received.append(value)
+            }
+            #expect(received == [42])
+        }
 
-            let value = try await ends.receiver.receive()
-            #expect(value == 42)
+        @Test
+        func `Taking the ends keeps the channel open`() async throws {
+            let ends = Async.Channel<Int>.Bounded(capacity: 2).take().ends()
+            #expect(ends.isClosed == false)
 
-            let closed = try await ends.receiver.receive()
-            #expect(closed == nil)
+            try await ends.sender.send(1)
+            try await ends.sender.send(2)
+            #expect(ends.isClosed == false)
+
+            let first = try await ends.receiver.receive()
+            let second = try await ends.receiver.receive()
+            #expect(first == 1)
+            #expect(second == 2)
         }
 
         @Test
