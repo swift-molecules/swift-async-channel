@@ -375,5 +375,32 @@ extension `Async.Channel.Unbounded Tests` {
             let received = await sink.consume(parcel)
             #expect(received == 99)
         }
+
+        @Test
+        func `A cancellation that arrives after delivery does not cancel a later receive`() async throws {
+            for _ in 0..<50 {
+                let ends = Async.Channel<Int>.Unbounded().take().ends()
+                let sender = ends.sender
+                let elements = ends.receiver.elements
+
+                let first = Task {
+                    var iterator = elements.makeAsyncIterator()
+                    return try await iterator.next()
+                }
+                try await Task.sleep(for: .milliseconds(1))
+                try sender.send(1)
+                first.cancel()
+                _ = try? await first.value
+
+                let second = Task {
+                    var iterator = elements.makeAsyncIterator()
+                    return try await iterator.next()
+                }
+                try await Task.sleep(for: .milliseconds(1))
+                try sender.send(2)
+                let value = try await second.value
+                #expect(value == 2)
+            }
+        }
     }
 }

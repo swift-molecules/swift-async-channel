@@ -1,5 +1,6 @@
 #if !hasFeature(Embedded)
 
+    public import Async_Waiter
     public import Ownership
     import Buffer
     import Buffer_Linear_Primitive
@@ -61,6 +62,7 @@
                 break
             }
 
+            let flag = Async.Waiter.Flag()
             let signal: Async.Channel<Element>.Bounded.State.Receive.Signal =
                 await withTaskCancellationHandler {
                     await unsafe withUnsafeContinuation {
@@ -71,7 +73,10 @@
                         ) in
 
                         let action = storage.withLock { state in
-                            state.suspend(continuation: unsafe Async.Continuation.Unsafe(raw))
+                            state.suspend(
+                                flag: flag,
+                                continuation: unsafe Async.Continuation.Unsafe(raw)
+                            )
                         }
                         Async.Channel<Element>.Bounded.Storage.handleReceive(
                             consume action,
@@ -79,6 +84,7 @@
                         )
                     }
                 } onCancel: {
+                    flag.cancel()
                     let action = storage.withLock { state in
                         state.cancel()
                     }

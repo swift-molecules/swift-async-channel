@@ -10,6 +10,7 @@ import Memory_Allocator_Protocol
     public import Buffer_Ring_Primitive
 
     public import Ownership
+    public import Async_Waiter
 
     extension Async.Channel.Unbounded where Element: ~Copyable {
 
@@ -22,16 +23,12 @@ import Memory_Allocator_Protocol
             var waiter: Receive.Continuation?
 
             @usableFromInline
-            var cancelledReceiver: Bool
-
-            @usableFromInline
             var status: Status
 
             @usableFromInline
             init() {
                 self.buffer = Deque()
                 self.waiter = nil
-                self.cancelledReceiver = false
                 self.status = .open
             }
         }
@@ -153,9 +150,11 @@ import Memory_Allocator_Protocol
         }
 
         @usableFromInline
-        mutating func wait(_ cont: consuming Receive.Continuation) -> Receive.Step {
-            if cancelledReceiver {
-                cancelledReceiver = false
+        mutating func wait(
+            _ cont: consuming Receive.Continuation,
+            flag: Async.Waiter.Flag
+        ) -> Receive.Step {
+            if flag.cancelled {
                 return .cancelled(receiver: cont)
             }
 
@@ -180,8 +179,6 @@ import Memory_Allocator_Protocol
             if let cont = waiter.take() {
                 return .stop(cont)
             }
-
-            cancelledReceiver = true
             return .none
         }
     }

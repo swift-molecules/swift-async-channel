@@ -1,6 +1,7 @@
 #if !hasFeature(Embedded)
 
     public import Ownership
+    public import Async_Waiter
     internal import Queue
     import Buffer
     import Buffer_Linear_Primitive
@@ -57,6 +58,7 @@
                 throw .cancelled
             }
 
+            let flag = Async.Waiter.Flag()
             let signal: Async.Channel<Element>.Unbounded.State.Receive.Signal =
                 await withTaskCancellationHandler {
                     await unsafe withUnsafeContinuation {
@@ -67,7 +69,7 @@
                         ) in
 
                         let action = storage.withLock { state in
-                            state.wait(unsafe Async.Continuation.Unsafe(raw))
+                            state.wait(unsafe Async.Continuation.Unsafe(raw), flag: flag)
                         }
 
                         Async.Channel<Element>.Unbounded.Storage.handleReceive(
@@ -76,6 +78,7 @@
                         )
                     }
                 } onCancel: {
+                    flag.cancel()
 
                     let stopAction = storage.withLock { state in
                         state.stop()

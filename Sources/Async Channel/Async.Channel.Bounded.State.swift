@@ -26,8 +26,6 @@ public import Memory_Allocator_Protocol
             var receiver: Receiver?
             @usableFromInline
             let capacity: Index<Element>.Count
-            @usableFromInline
-            var cancelledReceiver: Bool = false
 
             @usableFromInline
             init(capacity: Index<Element>.Count) {
@@ -330,11 +328,11 @@ public import Memory_Allocator_Protocol
 
         @usableFromInline
         mutating func suspend(
+            flag: Async.Waiter.Flag,
             continuation: consuming Receive.Continuation
         ) -> Receive.Action {
 
-            if cancelledReceiver {
-                cancelledReceiver = false
+            if flag.cancelled {
                 return .rejectCancelled(receiver: continuation)
             }
 
@@ -401,8 +399,6 @@ public import Memory_Allocator_Protocol
                 if let receiver = self.receiver.take() {
                     return .resumeWithCancellation(receiver.continuation)
                 }
-
-                cancelledReceiver = true
                 return .none
 
             case .closed, .finished:

@@ -341,5 +341,32 @@ extension `Async.Channel.Bounded Tests` {
             #expect(second == 2)
             #expect(third == nil)
         }
+
+        @Test
+        func `A cancellation that arrives after delivery does not cancel a later receive`() async throws {
+            for _ in 0..<50 {
+                let channel = Async.Channel<Int>.Bounded(capacity: 1)
+                let sender = channel.sender
+                let elements = channel.receiver.elements
+
+                let first = Task {
+                    var iterator = elements.makeAsyncIterator()
+                    return try await iterator.next()
+                }
+                try await Task.sleep(for: .milliseconds(1))
+                try await sender.send(1)
+                first.cancel()
+                _ = try? await first.value
+
+                let second = Task {
+                    var iterator = elements.makeAsyncIterator()
+                    return try await iterator.next()
+                }
+                try await Task.sleep(for: .milliseconds(1))
+                try await sender.send(2)
+                let value = try await second.value
+                #expect(value == 2)
+            }
+        }
     }
 }
